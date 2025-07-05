@@ -1,0 +1,9 @@
+[
+    {
+        "name": "marwan",
+        "age": 21,
+        "has_appointment": true,
+        "vaccine_date": "2025-09-08",
+        "vaccine_type": "moderna"
+    }
+]

@@ -1,5 +1,5 @@
 from tracker.validation import input_yes_no, input_positive_int
-from tracker.vaccine_utils import is_eligible, can_vaccinate, valid_date
+from tracker.vaccine_utils import is_eligible, can_vaccinate, valid_date, validate_date_or_raise
 from tracker.file_io import save_patients, load_patients
 
 def main():
@@ -22,10 +22,17 @@ def main():
         if not can_vaccinate(has_appointment):
             print(f"{name} cannot be vaccinated without an appointment.")
             continue
-        vaccine_date = input("Enter the vaccine date (YYYY-MM-DD): ").strip()
-        if not valid_date(vaccine_date):
-            print(f"Invalid date format for {name}. Please use YYYY-MM-DD.")
-            continue
+        
+        while True:
+            try:
+                vaccine_date = input("Enter the vaccine date (YYYY-MM-DD): ").strip()
+                validate_date_or_raise(vaccine_date)
+                break
+
+            except ValueError as e:
+                print(e)
+                
+        
         vaccine_type = input("Enter the vaccine type: ").strip()
         total_vaccines += 1
         patient = {

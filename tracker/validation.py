@@ -7,7 +7,14 @@ def input_yes_no(prompt):
 
 def input_positive_int(prompt):
     while True:
-        response = input(prompt).strip()
-        if response.isdigit() and int(response) > 0:
-            return int(response)
-        print("Please enter a positive number.")
+        try:
+            response = input(prompt).strip()
+            value = int(response)
+            if value > 0:
+                return value
+            else:
+                print("Please enter a positive number.")
+        except ValueError:
+            print("Invalid input. Please enter a positive integer.")
+
+            

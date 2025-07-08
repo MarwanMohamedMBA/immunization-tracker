@@ -1,6 +1,8 @@
 from tracker.validation import input_yes_no, input_positive_int
 from tracker.vaccine_utils import is_eligible, can_vaccinate, valid_date, validate_date_or_raise
 from tracker.file_io import save_patients, load_patients
+from tracker.api_utils import get_vaccine_data
+
 
 def main():
     total_patients = input_positive_int("Enter the number of patients: ")
@@ -48,7 +50,8 @@ def main():
     if input_yes_no("Would you like to see the vaccination summary? (yes/no): ") :
         load_patients("patients.json")
 
-    print("\n=== Vaccination Summary ===")
+        print("\n=== Vaccination Summary ===")
+
     for patient in patients_list:
         print(f"Name: {patient['name']}")
         print(f"Age: {patient['age']}")                  
@@ -60,6 +63,20 @@ def main():
     print(f"Ineligible patients: {ineligible_patients}")
     print(f"Total vaccines administered: {total_vaccines}")
     print("Patient data saved to patients.json")
+    # ✅ NEW: Pull real-time API data
+    print("\n=== CDC COVID Vaccination Data Snapshot ===")
+    api_data = get_vaccine_data()
+
+    if api_data is not None:
+        for entry in api_data[:3]:  # show only first 3 for now
+            print(f"Date: {entry.get('date')}")
+            print(f"Location: {entry.get('location')}")
+            print(f"Doses Administered: {entry.get('administered')}")
+            print(f"Fully Vaccinated: {entry.get('series_complete_yes')}")
+            print("-" * 40)
+    else:
+        print("Could not fetch CDC vaccination data.")
+
     print("Thank you for using the vaccination tracker!")
     
 
